@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pelaporan Keadaan Bahaya DI PT.SMA - Toka Tindung</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('bahaya.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    .overlay {
+      background: rgba(255, 255, 255, 0.9);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px;
+    }
+
+    .form-container {
+      max-width: 600px;
+      width: 100%;
+      background: #fff;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      animation: fadeIn 0.8s ease;
+    }
+
+    h1 { 
+      text-align: center; 
+      color: #0b5394; 
+      margin-bottom: 25px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 6px;
+      color: #333;
+    }
+
+    input, textarea {
+      width: 100%; 
+      padding: 12px; 
+      margin-bottom: 16px;
+      border: 1px solid #ccc; 
+      border-radius: 8px; 
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    textarea { 
+      resize: vertical; 
+      min-height: 100px; 
+    }
+
+    input[type="file"] { 
+      padding: 6px 0;
+      border: none;
+    }
+
+    button {
+      width: 100%; 
+      padding: 14px; 
+      background: #0b5394; 
+      color: white; 
+      border: none; 
+      border-radius: 8px;
+      font-size: 16px; 
+      cursor: pointer; 
+      transition: 0.3s;
+    }
+
+    button:hover { background: #073763; }
+
+    footer { 
+      text-align: center; 
+      padding: 12px; 
+      font-size: 14px; 
+      color: #555; 
+    }
+
+    /* Tampilan laporan */
+    #laporan {
+      display: none;
+      max-width: 750px;
+      margin: 30px auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+      animation: fadeIn 0.6s ease;
+    }
+
+    #laporan h2 {
+      text-align: center;
+      color: #0b5394;
+      margin-bottom: 10px;
+    }
+
+    #laporan hr {
+      border: 2px solid #0b5394;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+    }
+
+    table td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      vertical-align: top;
+    }
+
+    table td:first-child {
+      font-weight: bold;
+      color: #0b5394;
+      width: 200px;
+      background: #f9f9f9;
+    }
+
+    #out_gambar {
+      max-width: 100%;
+      margin-top: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 4px;
+      display: none;
+    }
+
+    /* Animasi */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Mode print */
+    @media print {
+      body { background: #fff !important; }
+      .overlay, .form-container, button { display: none !important; }
+      #laporan { display: block; box-shadow: none; margin: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <div class="form-container" id="form-wrapper">
+      <h1>Form Pelaporan Kejadian Bahaya</h1>
+      <form id="laporanForm">
+        <label for="nama">Nama Pelapor</label>
+        <input type="text" id="nama" required>
+
+        <label for="lokasi">Lokasi Kejadian</label>
+        <input type="text" id="lokasi" required>
+
+        <label for="deskripsi">Deskripsi Kejadian</label>
+        <textarea id="deskripsi" required></textarea>
+
+        <label for="gambar">Upload Gambar</label>
+        <input type="file" id="gambar" accept="image/*">
+
+        <button type="button" onclick="cetakLaporan()">Kirim & Simpan PDF</button>
+      </form>
+      <footer>&copy; 2025 PT. Samudera Mulia Abadi - Toka Tindung</footer>
+    </div>
+  </div>
+
+  <!-- Output Laporan -->
+  <div id="laporan">
+    <h2>LAPORAN KEJADIAN BAHAYA</h2>
+    <hr>
+    <table>
+      <tr>
+        <td>Nama Pelapor</td>
+        <td><span id="out_nama"></span></td>
+      </tr>
+      <tr>
+        <td>Lokasi Kejadian</td>
+        <td><span id="out_lokasi"></span></td>
+      </tr>
+      <tr>
+        <td>Deskripsi Kejadian</td>
+        <td><span id="out_deskripsi"></span></td>
+      </tr>
+      <tr>
+        <td>Gambar Pendukung</td>
+        <td><img id="out_gambar"></td>
+      </tr>
+    </table>
+    <footer style="margin-top:30px; text-align:center; font-size:13px; color:#555;">
+      &copy; 2025 PT. Samudera Mulia Abadi - Toka Tindung
+    </footer>
+  </div>
+
+  <script>
+  function cetakLaporan() {
+    document.getElementById("out_nama").innerText = document.getElementById("nama").value;
+    document.getElementById("out_lokasi").innerText = document.getElementById("lokasi").value;
+    document.getElementById("out_deskripsi").innerText = document.getElementById("deskripsi").value;
+
+    const file = document.getElementById("gambar").files[0];
+    const laporanDiv = document.getElementById("laporan");
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = document.getElementById("out_gambar");
+        img.onload = function() {
+          laporanDiv.style.display = "block";
+          setTimeout(() => window.print(), 300);
+        };
+        img.src = e.target.result;
+        img.style.display = "block";
+      };
+      reader.readAsDataURL(file);
+    } else {
+      document.getElementById("out_gambar").style.display = "none";
+      laporanDiv.style.display = "block";
+      window.print();
+    }
+  }
+  </script>
+</body>
+</html>
